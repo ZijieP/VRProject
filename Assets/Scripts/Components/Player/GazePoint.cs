@@ -46,10 +46,8 @@ namespace VRMeeting
             else
             {
                 /*  Gaze points */
-                // GameObject[] gos = GameObject.FindGameObjectsWithTag(mlapiNetworkManager.GazeObjectNameDict[id]);
-
-                // Debug.Log(mlapiNetworkManager.GazeObjectNameDict[id]);
-                // Debug.Log(TagManager.FindObjsWithTag(mlapiNetworkManager.GazeObjectNameDict[id]));
+                if(TagManager.FindObjsWithTag(mlapiNetworkManager.GazeObjectName.Value) == null)
+                    return;
                 GameObject[] gos = TagManager.FindObjsWithTag(mlapiNetworkManager.GazeObjectName.Value).ToArray();
                 Vector3 relativePosition = mlapiNetworkManager.GazePointRelativePosition.Value;
                 int numGOs = gos.Length;
