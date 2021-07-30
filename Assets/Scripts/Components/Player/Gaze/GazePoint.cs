@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MLAPI;
 using Tags;
-namespace VRMeeting
+namespace VRComponent
 {
     public class GazePoint : NetworkBehaviour
     {
@@ -28,7 +28,7 @@ namespace VRMeeting
         {
 
             string id = GetComponent<Tag>().id;
-            var mlapiNetworkManager = GetComponent<MLAPINetworkManager>();
+            var mlapiNetworkManager = GetComponent<NetworkVariableManager>();
             gazePointColor = mlapiNetworkManager.GazePointColor.Value;
 
 

@@ -8,7 +8,7 @@ using Tags;
 using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
 
-namespace VRMeeting
+namespace VRComponent
 {
     //Monobehaviour which implements the "IGazeFocusable" interface, meaning it will be called on when the object receives focus
     public class HighlightAtGazeZJ : NetworkBehaviour, IGazeFocusable
@@ -62,17 +62,18 @@ namespace VRMeeting
                 // printDict(dict);
                 string playerTag = "Player";
                 List<GameObject> players = TagManager.FindObjsWithTag(playerTag);
-                foreach (GameObject player in players)
-                {
-                    Ray ray  =  player.GetComponent<MLAPINetworkManager>().EyeTrackingRay.Value;
-                    RaycastHit hit;
-                    bool isCollider = Physics.Raycast(ray, out hit);
-                    if (isCollider && hit.collider.gameObject.GetInstanceID() == gameObject.GetInstanceID())
+                if(players!=null)
+                    foreach (GameObject player in players)
                     {
-                        GazeFocusChanged(true);
-                        return;
+                        Ray ray  =  player.GetComponent<NetworkVariableManager>().EyeTrackingRay.Value;
+                        RaycastHit hit;
+                        bool isCollider = Physics.Raycast(ray, out hit);
+                        if (isCollider && hit.collider.gameObject.GetInstanceID() == gameObject.GetInstanceID())
+                        {
+                            GazeFocusChanged(true);
+                            return;
+                        }
                     }
-                }
                 GazeFocusChanged(false);
         }
 

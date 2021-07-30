@@ -6,7 +6,7 @@ using MLAPI;
 using PlayerData;
 using System.Linq;
 
-namespace VRMeeting
+namespace VRComponent
 {
     public class Focus : NetworkBehaviour
     {
@@ -102,17 +102,17 @@ namespace VRMeeting
                         // }
                         // else
                         // {
-                            if(t<error)
-                            {
-                                t = now - dict_objID_focusInfos[objID].Focus_start_time;
-                                score = minScore + Math.Pow(a_gazed, (c_gazed * t)) - 1;
-                            }
-                            else
-                            {
-                                // score(A,B)=maxscore-(a^(c*t)-1)
-                                score = maxScore - (Math.Pow(a_not_gazed, (c_not_gazed * t)) - 1);
-                                
-                            }
+                        if (t < error)
+                        {
+                            t = now - dict_objID_focusInfos[objID].Focus_start_time;
+                            score = minScore + Math.Pow(a_gazed, (c_gazed * t)) - 1;
+                        }
+                        else
+                        {
+                            // score(A,B)=maxscore-(a^(c*t)-1)
+                            score = maxScore - (Math.Pow(a_not_gazed, (c_not_gazed * t)) - 1);
+
+                        }
                         // }
                     }
                 }
@@ -124,7 +124,7 @@ namespace VRMeeting
                 {
                     score = minScore;
                 }
-                if(score > maxScore)
+                if (score > maxScore)
                 {
                     score = maxScore;
                 }
@@ -136,22 +136,25 @@ namespace VRMeeting
         {
             // double error = secTO100ns(0.5);
             long now = DateTime.Now.Ticks;
-            var mlapiNetworkManager = GetComponent<MLAPINetworkManager>();
+            var mlapiNetworkManager = GetComponent<NetworkVariableManager>();
             GameObject gazedObject = PlayerInfos.getGazedObject(mlapiNetworkManager.EyeTrackingRay.Value);
             string objID = null;
-            if (gazedObject.TryGetComponent<Tag>(out Tag t))
+            if (gazedObject)
             {
-                objID = t.id;
-            }
-            foreach (string id in dict_objID_focusInfos.Keys)
-            {
-                if (id == objID)
-                    dict_objID_focusInfos[id].Dict_score[method_NowGaze] = maxScore;
-                else
+                if (gazedObject.TryGetComponent<Tag>(out Tag t))
                 {
-                    if(now - dict_objID_focusInfos[id].Focus_end_time>error)
+                    objID = t.id;
+                }
+                foreach (string id in dict_objID_focusInfos.Keys)
+                {
+                    if (id == objID)
+                        dict_objID_focusInfos[id].Dict_score[method_NowGaze] = maxScore;
+                    else
                     {
-                        dict_objID_focusInfos[id].Dict_score[method_NowGaze] = minScore;
+                        if (now - dict_objID_focusInfos[id].Focus_end_time > error)
+                        {
+                            dict_objID_focusInfos[id].Dict_score[method_NowGaze] = minScore;
+                        }
                     }
                 }
             }
@@ -160,19 +163,23 @@ namespace VRMeeting
         void otherPlayerGazeScore()
         {
             string expectedObjName = "Player";
-            var mlapiNetworkManager = GetComponent<MLAPINetworkManager>();
+            var mlapiNetworkManager = GetComponent<NetworkVariableManager>();
             GameObject gazedObj = PlayerInfos.getGazedObject(mlapiNetworkManager.EyeTrackingRay.Value);
             string gazedObjName = "";
             string gazedObjID = null;
-            if (gazedObj.TryGetComponent<Tag>(out Tag t))
+            if (gazedObj)
             {
-                gazedObjID = t.id;
-                gazedObjName = t.objectName;
+                if (gazedObj.TryGetComponent<Tag>(out Tag t))
+                {
+                    gazedObjID = t.id;
+                    gazedObjName = t.objectName;
+                }
             }
+
             string otherGazedObjID = null;
             if (gazedObjName.Equals(expectedObjName))
             {
-                var otherMLAPINetworkManager = gazedObj.GetComponent<MLAPINetworkManager>();
+                var otherMLAPINetworkManager = gazedObj.GetComponent<NetworkVariableManager>();
                 GameObject otherGazedObj = PlayerInfos.getGazedObject(otherMLAPINetworkManager.EyeTrackingRay.Value);
                 if (otherGazedObj.TryGetComponent<Tag>(out Tag t1))
                 {
@@ -207,7 +214,7 @@ namespace VRMeeting
             double c_not_gazed = 1;
             double maxNotGazedTime = secTO100ns(10);
             double error = secTO100ns(0.5);
-            previousFocusScore(c_gazed, c_not_gazed, maxGazedTime, maxNotGazedTime,error);
+            previousFocusScore(c_gazed, c_not_gazed, maxGazedTime, maxNotGazedTime, error);
             nowGazeScore(error);
             otherPlayerGazeScore();
         }
@@ -230,28 +237,28 @@ namespace VRMeeting
             // long now = ns100TOSec(DateTime.Now.Ticks);
             // if (now - time_GUI >= 1)
             // {
-                if (IsLocalPlayer)
-                {
-                    
-                    GUILayout.BeginArea(new Rect(500, 10, 100, 100));
-                    // list_objID_focusInfos.Sort((x, y) => x. - y.age );
-                    int max = 3;
-                    int i = 0;
-                    var new_dict = from pair in dict_objID_focusInfos
-                                   orderby pair.Value.getTotalScore() descending
-                                   select pair;
-                    foreach (KeyValuePair<string, FocusInfos> kvp in new_dict)
-                    {
-                        if (i < max)
-                        {
-                            GUILayout.Label(kvp.Key + ": " + kvp.Value.getTotalScore());
+            if (IsLocalPlayer)
+            {
 
-                        }
-                        i++;
+                GUILayout.BeginArea(new Rect(500, 10, 100, 100));
+                // list_objID_focusInfos.Sort((x, y) => x. - y.age );
+                int max = 3;
+                int i = 0;
+                var new_dict = from pair in dict_objID_focusInfos
+                               orderby pair.Value.getTotalScore() descending
+                               select pair;
+                foreach (KeyValuePair<string, FocusInfos> kvp in new_dict)
+                {
+                    if (i < max)
+                    {
+                        GUILayout.Label(kvp.Key + ": " + kvp.Value.getTotalScore());
+
                     }
-                    GUILayout.EndArea();
-                    // time_GUI = now;
+                    i++;
                 }
+                GUILayout.EndArea();
+                // time_GUI = now;
+            }
             // }
 
             // GUILayout.Label("Mode: " + mode);
@@ -270,13 +277,20 @@ namespace VRMeeting
             // {
             //     Debug.Log(kvp.Key + ": " + kvp.Value);
             // }
-            var mlapiNetworkManager = GetComponent<MLAPINetworkManager>();
+            var mlapiNetworkManager = GetComponent<NetworkVariableManager>();
             GameObject objGazed = PlayerInfos.getGazedObject(mlapiNetworkManager.EyeTrackingRay.Value);
             string objGazedID = null;
-            if (objGazed.hasTag("Focus"))
+            if (objGazed)
             {
-                objGazedID = objGazed.GetComponent<Tag>().id;
-                id_obj_gaze_now = objGazedID;
+                if (objGazed.hasTag("Focus"))
+                {
+                    objGazedID = objGazed.GetComponent<Tag>().id;
+                    id_obj_gaze_now = objGazedID;
+                }
+                else
+                {
+                    id_obj_gaze_now = null;
+                }
             }
             else
             {

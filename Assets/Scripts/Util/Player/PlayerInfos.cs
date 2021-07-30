@@ -1,5 +1,7 @@
 using UnityEngine;
 using Tobii.XR;
+using Tags;
+using VRComponent;
 
 using Tobii.G2OM;
 
@@ -11,6 +13,13 @@ namespace PlayerData
         {
             var eyeTrackingData = TobiiXR.GetEyeTrackingData(TobiiXR_TrackingSpace.World);
             return new Ray(eyeTrackingData.GazeRay.Origin, eyeTrackingData.GazeRay.Direction);
+        }
+
+        public static Ray getEyeTrackingRay(string playerID)
+        {
+            GameObject player = TagManager.FindObjByID(playerID);
+            Ray ray = player.GetComponent<NetworkVariableManager>().EyeTrackingRay.Value;
+            return ray;
         }
 
         public static GameObject getGazedObject(Ray eyeTrackingRay)

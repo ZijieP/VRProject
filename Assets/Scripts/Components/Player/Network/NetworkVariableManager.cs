@@ -9,13 +9,15 @@ using Tags;
 using Valve.VR;
 using RootMotion.FinalIK;
 
-namespace VRMeeting
+
+
+namespace VRComponent
 {
-    public class MLAPINetworkManager : NetworkBehaviour
+    public class NetworkVariableManager : NetworkBehaviour
     {
         public NetworkVariableColor GazePointColor = new NetworkVariableColor(new NetworkVariableSettings
         {
-            WritePermission = NetworkVariablePermission.Everyone,
+            WritePermission = NetworkVariablePermission.OwnerOnly,
             ReadPermission = NetworkVariablePermission.Everyone
         });
         public NetworkVariableVector3 VRHelmetPosition = new NetworkVariableVector3(new NetworkVariableSettings

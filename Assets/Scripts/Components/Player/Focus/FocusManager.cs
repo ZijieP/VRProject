@@ -1,7 +1,7 @@
 using UnityEngine;
 using Tags;
 
-namespace VRMeeting
+namespace VRComponent
 {
     public class FocusManager : MonoBehaviour
     {

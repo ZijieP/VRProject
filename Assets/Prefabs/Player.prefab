@@ -2007,10 +2007,10 @@ GameObject:
   - component: {fileID: 7510649777079608386}
   - component: {fileID: 5929328520855619171}
   - component: {fileID: 1412669249180939904}
-  - component: {fileID: 9014799721927570019}
   - component: {fileID: 8638345043446618374}
   - component: {fileID: 911203498246235966}
   - component: {fileID: -2228419062322310933}
+  - component: {fileID: 5125637190495167556}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2104,20 +2104,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rayLine: {fileID: 0}
   tfGazePointList: []
-  GazePointColor: {r: 0, g: 0, b: 0, a: 0}
---- !u!114 &9014799721927570019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3807482661188233141}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f1357ac315fe12408522fe6c3297201, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxRaylength: 0
+  gazePointColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!120 &8638345043446618374
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -2459,6 +2446,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   time_GUI: 0
+--- !u!114 &5125637190495167556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3807482661188233141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 367b80556bcf78740b57dfea6fed43a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GazePointColor:
+    m_InternalValue: {r: 0, g: 0, b: 0, a: 0}
+  VRHelmetPosition:
+    m_InternalValue: {x: 0, y: 0, z: 0}
+  VRHelmetRotation:
+    m_InternalValue: {x: 0, y: 0, z: 0, w: 0}
+  ControllerLPosition:
+    m_InternalValue: {x: 0, y: 0, z: 0}
+  ControllerLRotation:
+    m_InternalValue: {x: 0, y: 0, z: 0, w: 0}
+  ControllerRPosition:
+    m_InternalValue: {x: 0, y: 0, z: 0}
+  ControllerRRotation:
+    m_InternalValue: {x: 0, y: 0, z: 0, w: 0}
+  GazePointRelativePosition:
+    m_InternalValue: {x: 0, y: 0, z: 0}
+  GazeObjectName:
+    m_InternalValue: 
+  maxRaylength: 0
 --- !u!1 &3934948397574756275
 GameObject:
   m_ObjectHideFlags: 0
