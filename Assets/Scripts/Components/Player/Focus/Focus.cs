@@ -111,7 +111,6 @@ namespace VRComponent
                         {
                             // score(A,B)=maxscore-(a^(c*t)-1)
                             score = maxScore - (Math.Pow(a_not_gazed, (c_not_gazed * t)) - 1);
-
                         }
                         // }
                     }
@@ -304,7 +303,7 @@ namespace VRComponent
                     if (has_saved_now_focus == false)
                     {
                         // id_obj_focus_previous = id_obj_gaze_now;
-                        // If the previous focus has ended, and then staring again later, if the score of focus is not zero, then it will be deemed that the player has been paying attention.
+                        // If the previous focus has ended, and then staring again later, if the score of focus is not zero, then it will be deemed that the player has been paying attention all the time.
                         if (dict_objID_focusInfos[objGazedID].Dict_score[method_PreviousFocus] > 0)
                         {
                             dict_objID_focusInfos[objGazedID].Focus_end_time = 0;

@@ -19,6 +19,10 @@ namespace Tags
             {
                 id = objectName + gameObject.GetComponent<NetworkObject>().NetworkObjectId;
             }
+            if(!tags.Contains(objectName))
+            {
+                tags.Add(objectName);
+            }
             gameObject.addTag(tags.ToArray());
             gameObject.addID(id);
 

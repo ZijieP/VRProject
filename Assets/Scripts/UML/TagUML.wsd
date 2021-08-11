@@ -1,0 +1,25 @@
+@startuml
+class FocusInfos {
+{field}focus_start_time : long
+{field}focus_end_time : long
+{field}normalized_score : double
+{field}maxScore : double
+{field}minScore : double
+{field}dict_score : Dictionary<string, double>
+{field}dict_score_weight : Dictionary<string, double>
+
+{method}getTotalScore : double
+{method}Dict_score_weight(get) : Dictionary<string, double>
+{method}Dict_score_weight(set) : void
+{method}Focus_start_time(get) : long
+{method}Focus_start_time(set) : void
+{method}Focus_end_time(get) : long
+{method}Focus_end_time(set) : void
+{method}Normalized_score(get) : double
+{method}Normalized_score(set) : void
+{method}MaxScore(get) : double
+{method}MaxScore(set) : void
+{method}MinScore(get) : double
+{method}MinScore(set) : void
+}
+@enduml
