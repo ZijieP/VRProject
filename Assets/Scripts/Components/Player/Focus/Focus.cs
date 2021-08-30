@@ -1,3 +1,7 @@
+/// <summary>
+/// This component will update the player's attention score information.
+/// <summary>
+
 using UnityEngine;
 using System.Collections.Generic;
 using System;
@@ -12,7 +16,6 @@ namespace VRComponent
     {
         public Dictionary<string, double> dict_score_weight = new Dictionary<string, double>();
         public Dictionary<string, FocusInfos> dict_objID_focusInfos = new Dictionary<string, FocusInfos>();
-        // string id_obj_focus_previous = null;
         string playerID;
         string id_obj_gaze_now = null;
         string id_obj_gaze_just_now = null;
@@ -22,10 +25,9 @@ namespace VRComponent
         double minScore;
 
         string method_Distance = "Distance";
-        string method_PreviousFocus = "PreviousFocus";
+        string method_FocusDuration = "FocusDuration";
         string method_NowGaze = "NowGaze";
         string method_OtherPlayerGaze = "OtherPlayerGaze";
-        // string method_Total = "Total";
 
         public long time_GUI = 0;
 
@@ -33,17 +35,16 @@ namespace VRComponent
         void Start()
         {
             initAttributes();
-
         }
 
         void initAttributes()
         {
             double weightDistance = 0.1f;
-            double weightPreviousFocus = 0.5f;
+            double weightFocusDuration = 0.5f;
             double weightNowGaze = 0.25f;
             double weightOtherGaze = 0.15f;
             dict_score_weight.Add(method_Distance, weightDistance);
-            dict_score_weight.Add(method_PreviousFocus, weightPreviousFocus);
+            dict_score_weight.Add(method_FocusDuration, weightFocusDuration);
             dict_score_weight.Add(method_NowGaze, weightNowGaze);
             dict_score_weight.Add(method_OtherPlayerGaze, weightOtherGaze);
             maxScore = 100;
@@ -52,14 +53,12 @@ namespace VRComponent
 
         void distanceScore(double c, double maxDistance)
         {
-            // maxScore-(a^(c*maxDistance)-1) = minScore
             double a = Math.Pow(maxScore - minScore + 1, 1.0 / (c * maxDistance));
             foreach (string objID in dict_objID_focusInfos.Keys)
             {
                 GameObject obj = TagManager.FindObjByID(objID);
                 double dist = Vector3.Distance(transform.position, obj.transform.position);
                 double score;
-                // score(A,B) = maxScore-(a^(c*d)-1)
                 if (dist >= maxDistance)
                 {
                     score = minScore;
@@ -72,12 +71,10 @@ namespace VRComponent
 
             }
         }
-        void previousFocusScore(double c_gazed, double c_not_gazed, double maxGazedTime, double maxNotGazedTime, double error)
+        void focusDurationScore(double c_gazed, double c_not_gazed, double maxGazedTime, double maxNotGazedTime, double error)
         {
             long now = DateTime.Now.Ticks;
-            // a_gazed^(c_gazed*maxGazedTime)-1=maxScore
             double a_gazed = Math.Pow(maxScore + 1, 1.0 / (c_gazed * maxGazedTime));
-            // maxscore-(a_not_gazed^(c_not_gazed*maxNotGazedTime)-1)=minScore
             double a_not_gazed = Math.Pow(maxScore - minScore + 1, 1.0 / (c_not_gazed * maxNotGazedTime));
             foreach (string objID in dict_objID_focusInfos.Keys)
             {
@@ -86,22 +83,12 @@ namespace VRComponent
                 {
                     if (dict_objID_focusInfos[objID].Focus_end_time == 0) // The object is gazed now
                     {
-                        // score(A,B) = minScore + a^(c*t)-1
                         long t = now - dict_objID_focusInfos[objID].Focus_start_time;
                         score = minScore + Math.Pow(a_gazed, (c_gazed * t)) - 1;
                     }
                     else // The object is not gazed now
                     {
                         long t = now - dict_objID_focusInfos[objID].Focus_end_time;
-                        // score(A,B)=maxscore-(a^(c*t)-1)
-                        // if (t >= maxNotGazedTime)
-                        // {
-                        //     score = minScore;
-                        //     // dict_objID_focusInfos[objID].Focus_start_time = 0;
-                        //     // dict_objID_focusInfos[objID].Focus_end_time = 0;
-                        // }
-                        // else
-                        // {
                         if (t < error)
                         {
                             t = now - dict_objID_focusInfos[objID].Focus_start_time;
@@ -109,10 +96,8 @@ namespace VRComponent
                         }
                         else
                         {
-                            // score(A,B)=maxscore-(a^(c*t)-1)
                             score = maxScore - (Math.Pow(a_not_gazed, (c_not_gazed * t)) - 1);
                         }
-                        // }
                     }
                 }
                 else
@@ -127,13 +112,12 @@ namespace VRComponent
                 {
                     score = maxScore;
                 }
-                dict_objID_focusInfos[objID].Dict_score[method_PreviousFocus] = score;
+                dict_objID_focusInfos[objID].Dict_score[method_FocusDuration] = score;
 
             }
         }
         void nowGazeScore(double error)
         {
-            // double error = secTO100ns(0.5);
             long now = DateTime.Now.Ticks;
             var mlapiNetworkManager = GetComponent<NetworkVariableManager>();
             GameObject gazedObject = PlayerInfos.getGazedObject(mlapiNetworkManager.EyeTrackingRay.Value);
@@ -213,7 +197,7 @@ namespace VRComponent
             double c_not_gazed = 1;
             double maxNotGazedTime = secTO100ns(10);
             double error = secTO100ns(0.5);
-            previousFocusScore(c_gazed, c_not_gazed, maxGazedTime, maxNotGazedTime, error);
+            focusDurationScore(c_gazed, c_not_gazed, maxGazedTime, maxNotGazedTime, error);
             nowGazeScore(error);
             otherPlayerGazeScore();
         }
@@ -233,49 +217,31 @@ namespace VRComponent
         }
         void OnGUI()
         {
-            // long now = ns100TOSec(DateTime.Now.Ticks);
-            // if (now - time_GUI >= 1)
-            // {
             if (IsLocalPlayer)
             {
 
                 GUILayout.BeginArea(new Rect(500, 10, 100, 100));
-                // list_objID_focusInfos.Sort((x, y) => x. - y.age );
                 int max = 3;
                 int i = 0;
                 var new_dict = from pair in dict_objID_focusInfos
-                               orderby pair.Value.getTotalScore() descending
+                               orderby pair.Value.GetTotalScore() descending
                                select pair;
                 foreach (KeyValuePair<string, FocusInfos> kvp in new_dict)
                 {
                     if (i < max)
                     {
-                        GUILayout.Label(kvp.Key + ": " + kvp.Value.getTotalScore());
+                        GUILayout.Label(kvp.Key + ": " + kvp.Value.GetTotalScore());
 
                     }
                     i++;
                 }
                 GUILayout.EndArea();
-                // time_GUI = now;
             }
-            // }
-
-            // GUILayout.Label("Mode: " + mode);
-            // GUILayout.Label("Mode: " + mode);
-            // GUILayout.Label("Mode: " + mode);
-            // GUILayout.Label("Mode: " + mode);
-
         }
         void updateFocusInfos()
         {
             playerID = gameObject.GetComponent<Tag>().id;
             long now = DateTime.Now.Ticks;
-            // Debug.Log(MLAPINetworkManager.EyeTrackingRayDict.Count);
-
-            // foreach (KeyValuePair<string, Ray> kvp in MLAPINetworkManager.EyeTrackingRayDict)
-            // {
-            //     Debug.Log(kvp.Key + ": " + kvp.Value);
-            // }
             var mlapiNetworkManager = GetComponent<NetworkVariableManager>();
             GameObject objGazed = PlayerInfos.getGazedObject(mlapiNetworkManager.EyeTrackingRay.Value);
             string objGazedID = null;
@@ -302,9 +268,7 @@ namespace VRComponent
                 {
                     if (has_saved_now_focus == false)
                     {
-                        // id_obj_focus_previous = id_obj_gaze_now;
-                        // If the previous focus has ended, and then staring again later, if the score of focus is not zero, then it will be deemed that the player has been paying attention all the time.
-                        if (dict_objID_focusInfos[objGazedID].Dict_score[method_PreviousFocus] > 0)
+                        if (dict_objID_focusInfos[objGazedID].Dict_score[method_FocusDuration] > 0)
                         {
                             dict_objID_focusInfos[objGazedID].Focus_end_time = 0;
                         }
@@ -319,9 +283,6 @@ namespace VRComponent
                 }
                 else
                 {
-
-                    // Debug.Log("id_obj_gaze_just_now:"+id_obj_gaze_just_now);
-                    // Debug.Log("id_obj_gaze_now:"+id_obj_gaze_now);
                     now_focus_start_time = now;
                     if (id_obj_gaze_just_now != null)
                         dict_objID_focusInfos[id_obj_gaze_just_now].Focus_end_time = now;
@@ -342,10 +303,6 @@ namespace VRComponent
             }
         }
 
-        // long ns100TOSec(long ns)
-        // {
-        //     return ns / 10000000;
-        // }
         double secTO100ns(double seconds)
         {
             return seconds * 10000000;

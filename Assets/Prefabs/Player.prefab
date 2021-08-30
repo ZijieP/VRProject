@@ -2011,6 +2011,8 @@ GameObject:
   - component: {fileID: 911203498246235966}
   - component: {fileID: -2228419062322310933}
   - component: {fileID: 5125637190495167556}
+  - component: {fileID: -7170382536470698585}
+  - component: {fileID: -6897836615850311013}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2155,8 +2157,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.00925827
-        value: 0.010204315
+        time: 0.0047035217
+        value: 0.0051994324
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -2477,6 +2479,32 @@ MonoBehaviour:
   GazeObjectName:
     m_InternalValue: 
   maxRaylength: 0
+--- !u!114 &-7170382536470698585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3807482661188233141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a721ed987d408f640b08a34372494b1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rayLine: {fileID: 0}
+--- !u!65 &-6897836615850311013
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3807482661188233141}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 2, z: 0.5}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &3934948397574756275
 GameObject:
   m_ObjectHideFlags: 0

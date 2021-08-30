@@ -1,3 +1,7 @@
+/// <summary>
+/// This component will depict the player's gaze ray.
+/// <summary>
+
 using Tags;
 using UnityEngine;
 using MLAPI;
@@ -12,9 +16,7 @@ namespace VRComponent
 
         void Start()
         {
-            /* Ray Line*/
             rayLine = GetComponent<LineRenderer>();
-            /* Ray Line*/
         }
 
         void Update()
@@ -23,9 +25,6 @@ namespace VRComponent
             drawRayLine(PlayerInfos.getEyeTrackingRay(id));
         }
 
-        /**
-            Draw the ray line
-        **/
         void drawRayLine(Ray ray)
         {
             int maxRaylength = 100;

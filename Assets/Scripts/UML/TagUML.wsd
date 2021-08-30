@@ -8,18 +8,18 @@ class FocusInfos {
 {field}dict_score : Dictionary<string, double>
 {field}dict_score_weight : Dictionary<string, double>
 
-{method}getTotalScore : double
-{method}Dict_score_weight(get) : Dictionary<string, double>
-{method}Dict_score_weight(set) : void
-{method}Focus_start_time(get) : long
-{method}Focus_start_time(set) : void
-{method}Focus_end_time(get) : long
-{method}Focus_end_time(set) : void
-{method}Normalized_score(get) : double
-{method}Normalized_score(set) : void
-{method}MaxScore(get) : double
-{method}MaxScore(set) : void
-{method}MinScore(get) : double
-{method}MinScore(set) : void
+{method}GetTotalScore() : double
+{method}Dict_score_weight() : Dictionary<string, double>
+{method}Dict_score_weight(dict_score_weight:Dictionary<string, double>) : void
+{method}Focus_start_time() : long
+{method}Focus_start_time(focus_start_time:long) : void
+{method}Focus_end_time() : long
+{method}Focus_end_time(focus_end_time:long) : void
+{method}Normalized_score() : double
+{method}Normalized_score(normalized_score:double) : void
+{method}MaxScore() : double
+{method}MaxScore(maxScore:double) : void
+{method}MinScore() : double
+{method}MinScore(minScore:double) : void
 }
 @enduml

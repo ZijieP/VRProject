@@ -1,9 +1,12 @@
+/// <summary>
+/// This class is used to obtain player information.
+/// <summary>
+
 using UnityEngine;
 using Tobii.XR;
 using Tags;
 using VRComponent;
 
-using Tobii.G2OM;
 
 namespace PlayerData
 {
@@ -31,21 +34,5 @@ namespace PlayerData
             }
             return null;
         }
-
-        public static GameObject getGazedObject()
-        {
-            Ray eyeTrackingRay = getEyeTrackingRay();
-            RaycastHit hit;
-            if (Physics.Raycast(eyeTrackingRay, out hit))
-            {
-                return hit.transform.gameObject;
-            }
-            return null;
-        }
-
-        
-
     }
-
-    
 }

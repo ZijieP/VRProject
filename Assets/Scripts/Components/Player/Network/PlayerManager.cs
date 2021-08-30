@@ -1,7 +1,9 @@
-using System;
+/// <summary>
+/// This component allows players to choose Client, Server or Host mode to enter the game in the GUI interface.
+/// <summary>
+
 using UnityEngine;
 using MLAPI;
-using MLAPI.Configuration;
 
 /**
     NetworkManager implements the singleton pattern as it declares its singleton named Singleton. 
@@ -12,17 +14,7 @@ using MLAPI.Configuration;
 **/
 public class PlayerManager : MonoBehaviour
 {
-
-
-    void Awake()
-    {
-        
-    }
-    void Update()
-    {
-        
-    }
-
+    //
     void OnGUI()
     {
         GUILayout.BeginArea(new Rect(10, 10, 300, 300));
@@ -57,19 +49,5 @@ public class PlayerManager : MonoBehaviour
         GUILayout.Label("Mode: " + mode);
     }
 
-    static void SubmitNewPosition()
-    {
-        // if (GUILayout.Button(NetworkManager.Singleton.IsServer ? "Move" : "Request Position Change"))
-        // {
-        //     if (NetworkManager.Singleton.ConnectedClients.TryGetValue(NetworkManager.Singleton.LocalClientId,
-        //         out var networkedClient))
-        //     {
-        //         var player = networkedClient.PlayerObject.GetComponent<PlayerMovement>();
-        //         if (player)
-        //         {
-        //             // player.Move();
-        //         }
-        //     }
-        // }
-    }
+
 }

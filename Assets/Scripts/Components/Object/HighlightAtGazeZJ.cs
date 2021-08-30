@@ -1,12 +1,12 @@
-using System;
+/// <summary>
+/// This is a component that highlights the object being stared at. This component needs to be added to the object.
+/// <summary>
+
 using System.Collections.Generic;
 using Tobii.G2OM;
 using UnityEngine;
-using MLAPI.NetworkVariable.Collections;
 using MLAPI;
 using Tags;
-using MLAPI.Messaging;
-using MLAPI.NetworkVariable;
 
 namespace VRComponent
 {
@@ -54,12 +54,9 @@ namespace VRComponent
                 _renderer.material.color = Color.Lerp(_renderer.material.color, _targetColor, Time.deltaTime * (1 / AnimationTime));
             }
         }
-
+        // When the object is stared at by a player, this method makes it highlighted.
         private void updateAtGaze()
         {
-
-                // NetworkDictionary<long, Ray> dict = player.EyeTrackingRayDict;
-                // printDict(dict);
                 string playerTag = "Player";
                 List<GameObject> players = TagManager.FindObjsWithTag(playerTag);
                 if(players!=null)
@@ -76,19 +73,6 @@ namespace VRComponent
                     }
                 GazeFocusChanged(false);
         }
-
-        void printDict(NetworkDictionary<long, Ray> dict)
-        {
-            foreach (KeyValuePair<long, Ray> kvp in dict)
-            {
-                Ray ray = kvp.Value;
-                if (ray.direction.x > 0.1 || ray.direction.x < -0.1)
-                {
-                    print("Network:" + ray);
-                    print(kvp.Key + ":" + kvp.Value);
-                }
-
-            }
-        }
+        
     }
 }

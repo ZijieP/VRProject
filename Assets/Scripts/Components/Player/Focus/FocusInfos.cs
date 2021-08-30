@@ -1,10 +1,13 @@
+/// <summary>
+/// This class is used to store the player's attention information.
+/// <summary>
+
 using System.Collections.Generic;
 using System;
 namespace VRComponent
 {
     public class FocusInfos
     {
-        // public string objID;
         public long focus_start_time;
         public long focus_end_time;
         public double normalized_score ;
@@ -36,7 +39,7 @@ namespace VRComponent
             MaxScore = maxScore;
             MinScore = minScore;
         }
-        public double getTotalScore()
+        public double GetTotalScore()
         {
             double total = 0;
             foreach(string method in dict_score_weight.Keys)

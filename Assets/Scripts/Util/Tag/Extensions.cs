@@ -1,3 +1,7 @@
+/// <summary>
+/// This class is used to add, delete, modify, and check a single tag.
+/// <summary>
+
 using UnityEngine;
 using System.Collections.Generic;
 namespace Tags
