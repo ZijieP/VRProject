@@ -38,8 +38,6 @@ namespace VRComponent
 
         }
 
-
-
         void OnGUI()
         {
             if (IsLocalPlayer && !hasImported)
@@ -59,7 +57,7 @@ namespace VRComponent
         public void importAvatar(string avatarUrl)
         {
             AvatarLoader avatarLoader = new AvatarLoader();
-            avatarLoader.LoadAvatar(avatarUrl, OnAvatarLoaded);
+            avatarLoader.LoadAvatar(avatarUrl, OnAvatarLoaded); // La fonction OnAvatarLoaded s'exécutera automatiquement après l'importation de l'avatar.
         }
 
         public void OnAvatarLoaded(GameObject avatar, AvatarMetaData metaData)
