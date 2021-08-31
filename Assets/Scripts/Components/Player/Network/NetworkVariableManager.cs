@@ -19,6 +19,12 @@ namespace VRComponent
 {
     public class NetworkVariableManager : NetworkBehaviour
     {
+        public NetworkVariableString AvatarURL = new NetworkVariableString(new NetworkVariableSettings
+        {
+            WritePermission = NetworkVariablePermission.Everyone,
+            ReadPermission = NetworkVariablePermission.Everyone
+        });
+        
         // This attribute store the color of the user's gaze point.
         public NetworkVariableColor GazePointColor = new NetworkVariableColor(new NetworkVariableSettings
         {
@@ -174,6 +180,12 @@ namespace VRComponent
             GazePointRelativePosition.Value = new Vector3();
             GazeObjectName.Value = "Untagged";
             GazePointColor.Value = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+
+            if(GetComponent<ImportAvatar>())
+            {
+                var ia = GetComponent<ImportAvatar>();
+                AvatarURL.Value = ia.avatarUrl;
+            }
 
             // Gaze point information update
             RaycastHit hit;
